@@ -1,24 +1,24 @@
 clear all; echo off; close all force; clc; format long; %clear another variables
-%% Doutorado em Engenharia Mecânica PPGEM
-%Universidade Tecnológica Federal do Paraná
+%% Doutorado em Engenharia MecÃ¢nica PPGEM
+%Universidade TecnolÃ³gica Federal do ParanÃ¡
 %Campus Curitiba
 %Aluno: Marcos Takahama
 %Professor Paulo Henrique Dias dos Santos
 %Disciplina:CFD
 %03/10/2020
 % Ex_Aula_3_CFD.m
-%     Determine o perfil de temperatura de uma barra de aço (K=25 W/mK) de 1 metro
+%     Determine o perfil de temperatura de uma barra de aÃ§o (K=25 W/mK) de 1 metro
 %     de comprimento com temperaturas prescritas nas extremidades. Na extremidade em
-%     x=0, a temperatura vale 150ºC e em x=L vale 50ºC. Resolva o problema
-%     pelos métodos TDMA, Jacobi, Gauss-Seidel e SOR e compare o tempo
-%     computacional entre os métodos
+%     x=0, a temperatura vale 150ÂºC e em x=L vale 50ÂºC. Resolva o problema
+%     pelos mÃ©todos TDMA, Jacobi, Gauss-Seidel e SOR e compare o tempo
+%     computacional entre os mÃ©todos
 
 % Checkpoint = Ponto de debug
 %% 1 - Inputs
 
 %input parameters
-prompt = {'Valor da Temperatura 1','Valor da Temperatura 2','número de VC','Coef de relaxacao SOR'};
-dlg_title = 'Condições de Contorno';
+prompt = {'Valor da Temperatura 1','Valor da Temperatura 2','nÃºmero de VC','Coef de relaxacao SOR'};
+dlg_title = 'CondiÃ§Ãµes de Contorno';
 num_lines = 1;
 defaultans = {'150','50','500','0.5'};
 N=50; %this will control the width of the inputdlg
@@ -30,7 +30,7 @@ Tp2=str2num(answer{2});
 nv=str2num(answer{3});
 w=str2num(answer{4});
 
-%% 2-Método VF
+%% 2-MÃ©todo VF
 L = 1.0;
 dx = L/nv;
 k = 25;
@@ -38,22 +38,22 @@ T_est = 25;
 erro = 1e-4;
 kmax = 8*10^5;
 
-%Estimativa do campo inicial da variável
+%Estimativa do campo inicial da variÃ¡vel
 for i=1:nv
     T(i) = T_est;
 end
 
-%Cálculo da malha:
+%CÃ¡lculo da malha:
 x(1) = 0.5*dx;
 
 for i=2:nv
     x(i) = x(i-1) + dx;
 end
 
-% fprintf('Informações da Malha')
+% fprintf('InformaÃ§Ãµes da Malha')
 % x
 
-%Cálculo temperatura através do MVF
+%CÃ¡lculo temperatura atravÃ©s do MVF
 for i=1:nv
     if (i==1)
         Ae(i)=1;
@@ -86,11 +86,11 @@ for i=1:nv
         end
     end
 end
-% fprintf('Informações da Matriz e vetor')
+% fprintf('InformaÃ§Ãµes da Matriz e vetor')
 % E
 % Su
 
-% Subrotina para o cálculo dos coeficientes:
+% Subrotina para o cÃ¡lculo dos coeficientes:
 %Checkpoint
 [residue_TDMA,it_final_TDMA,T_TDMA,tempo_TDMA]=TDMA(Ae,Aw,Su,Ap,nv,T,erro,kmax);
 [residue_jacobi,it_final_jacobi,T_jacobi,tempo_jacobi]=gauss(Ae,Aw,Su,Ap,nv,T,erro,kmax);
@@ -100,7 +100,7 @@ end
 %% 3-plot de resultados
 
 %Checkpoint
-%solução analítica
+%soluÃ§Ã£o analÃ­tica
 pontosx=linspace(0,L,10000);
 pontosy=-100/L*pontosx+150;
 
@@ -118,9 +118,9 @@ hold on
 plot(x,T_SOR,'yd')
 
 title(['Lista 3'],'FontSize',20) %Legend options
-ylabel(['Temperatura (ºC)'])
+ylabel(['Temperatura (ÂºC)'])
 xlabel('Comprimento (m)')
-legend('Solução Analítica','TDMA','jacobi','gauss','SOR')
+legend('SoluÃ§Ã£o AnalÃ­tica','TDMA','jacobi','gauss','SOR')
 
                       annotation('textbox',...
                         [0.50 0.7 0.2 0.2],...
@@ -145,19 +145,19 @@ for m=1:N
     A(m) = Ap(m);
     B(m) = -Ae(m);
     C(m) = -Aw(m);
-    D(m) = Su(m); %A(i) é oriunda do programa principal (T)
+    D(m) = Su(m); %A(i) Ã© oriunda do programa principal (T)
 end
-% 2)(1º Passo) Cálculo do P(1) e do Q(1)
+% 2)(1Âº Passo) CÃ¡lculo do P(1) e do Q(1)
 P(1) = -B(1)/A(1);
 Q(1) = D(1)/A(1);
-% 3) (2º Passo) Cálculo de todos os P(m) e Q(m)
+% 3) (2Âº Passo) CÃ¡lculo de todos os P(m) e Q(m)
 for m=2:N
     P(m) = -B(m)/(A(m)+C(m)*P(m-1));
     Q(m) = (D(m)-C(m)*Q(m-1))/(A(m)+C(m)*P(m-1));
 end
-% !4) (3º Passo) Fazer a comparação R(N)=Q(N)
+% !4) (3Âº Passo) Fazer a comparaÃ§Ã£o R(N)=Q(N)
 T(N)=Q(N);
-% !5) (4º Passo) Calcular R para todos os pontos de N-1 a 1
+% !5) (4Âº Passo) Calcular R para todos os pontos de N-1 a 1
 % for m=N:-1:2 % DO  variable = startValue, StopValue [, StepValue]
 for m=N:-1:2 % DO  variable = startValue, StopValue [, StepValue]
     T(m-1) = P(m-1)*T(m) + Q(m-1);
@@ -171,53 +171,53 @@ end
 function [residue,it_final,T,tempo]=jacobi(Ae,Aw,Su,Ap,N,T,erro,kmax)
 tic;
 RMS=0;
-%1) Estimativa inicial da variável
+%1) Estimativa inicial da variÃ¡vel
 for i=1:N
-    M(i,1) = T(i); %A(i) é oriunda do programa principal (T)
+    M(i,1) = T(i); %A(i) Ã© oriunda do programa principal (T)
 end
 
-%2) Início do processo iterativo
-k=1; %Inicialização do contador de iterações
+%2) InÃ­cio do processo iterativo
+k=1; %InicializaÃ§Ã£o do contador de iteraÃ§Ãµes
 while (k<kmax)
-    %Cálculo da variável com os valores da iteração anterior
+    %CÃ¡lculo da variÃ¡vel com os valores da iteraÃ§Ã£o anterior
     for i=1:N
         if(i==1) %Primeiro Volume de Controle
             M(i,2)=(Ae(i)*M(i+1,1)+Su(i))/Ap(i);
         elseif((i>1)&&(i<N)) %Volumes de Controle Internos
             M(i,2)=(Aw(i)*M(i-1,1)+Ae(i)*M(i+1,1)+Su(i))/Ap(i);
-        else %Último Volume de Controle
+        else %Ãšltimo Volume de Controle
             M(i,2)=(Aw(i)*M(i-1,1)+Su(i))/Ap(i);
         end
     end
     
-    %3) Cálculo do Resíduo
+    %3) CÃ¡lculo do ResÃ­duo
     for i=1:N
         if((i>1)&&(i<N))
-            %Resíduo Local
+            %ResÃ­duo Local
             Ri(i)=abs(Su(i)+Ae(i)*M(i+1,2)+Aw(i)*M(i-1,2)-Ap(i)*M(i,2) );
-            % Resíduo da Iteração
+            % ResÃ­duo da IteraÃ§Ã£o
             RMS = RMS + Ri(i)^2.0;
         end
     end
     RMS = RMS^0.5;
     
-    %4) Avanço da iteração
+    %4) AvanÃ§o da iteraÃ§Ã£o
     for i=1:N
         M(i,1)=M(i,2);
     end
     
-    %5) Verificação da convergência
-    if(RMS<=erro+1) %CONVERGÊNCIA:
-        it_final = k; %armazena a última posição iterativa
-        k=kmax; %força o fim da iterações
+    %5) VerificaÃ§Ã£o da convergÃªncia
+    if(RMS<=erro+1) %CONVERGÃŠNCIA:
+        it_final = k; %armazena a Ãºltima posiÃ§Ã£o iterativa
+        k=kmax; %forÃ§a o fim da iteraÃ§Ãµes
         residue = RMS-1;
         
-    else %SEM CONVERGÊNCIA:
+    else %SEM CONVERGÃŠNCIA:
         k=k+1; %incremento de k
-        it_final = k; %armazena a última iteração ->kmax
+        it_final = k; %armazena a Ãºltima iteraÃ§Ã£o ->kmax
         residue = RMS-1;
     end
-end %Finalização do contador de iterações
+end %FinalizaÃ§Ã£o do contador de iteraÃ§Ãµes
 
 %6) Resultado que retorna para o programa principal
 for i=1:N
@@ -230,53 +230,53 @@ end
 function [residue,it_final,T,tempo]=gauss(Ae,Aw,Su,Ap,N,T,erro,kmax)
 tic
 RMS=0;
-%1) Estimativa inicial da variável
+%1) Estimativa inicial da variÃ¡vel
 for i=1:N
-    M(i,1) = T(i); %A(i) é oriunda do programa principal (T)
+    M(i,1) = T(i); %A(i) Ã© oriunda do programa principal (T)
 end
 
-%2) Início do processo iterativo
-k=1; %Inicialização do contador de iterações
+%2) InÃ­cio do processo iterativo
+k=1; %InicializaÃ§Ã£o do contador de iteraÃ§Ãµes
 while (k<kmax)
-    %Cálculo da variável com os valores da iteração anterior
+    %CÃ¡lculo da variÃ¡vel com os valores da iteraÃ§Ã£o anterior
     for i=1:N
         if(i==1) %Primeiro Volume de Controle
             M(i,2)=(Ae(i)*M(i+1,1)+Su(i))/Ap(i);
         elseif((i>1)&&(i<N)) %Volumes de Controle Internos
             M(i,2)=(Aw(i)*M(i-1,2)+Ae(i)*M(i+1,1)+Su(i))/Ap(i);
-        else %Último Volume de Controle
+        else %Ãšltimo Volume de Controle
             M(i,2)=(Aw(i)*M(i-1,2)+Su(i))/Ap(i);
         end
     end
     
-    %3) Cálculo do Resíduo
+    %3) CÃ¡lculo do ResÃ­duo
     for i=1:N
         if((i>1)&&(i<N))
-            %Resíduo Local
+            %ResÃ­duo Local
             Ri(i)=abs(Su(i)+Ae(i)*M(i+1,2)+Aw(i)*M(i-1,2)-Ap(i)*M(i,2) );
-            % Resíduo da Iteração
+            % ResÃ­duo da IteraÃ§Ã£o
             RMS = RMS + Ri(i)^2.0;
         end
     end
     RMS = RMS^0.5;
     
-    %4) Avanço da iteração
+    %4) AvanÃ§o da iteraÃ§Ã£o
     for i=1:N
         M(i,1)=M(i,2);
     end
     
-    %5) Verificação da convergência
-    if(RMS<=erro+1) %CONVERGÊNCIA:
-        it_final = k; %armazena a última posição iterativa
-        k=kmax; %força o fim da iterações
+    %5) VerificaÃ§Ã£o da convergÃªncia
+    if(RMS<=erro+1) %CONVERGÃŠNCIA:
+        it_final = k; %armazena a Ãºltima posiÃ§Ã£o iterativa
+        k=kmax; %forÃ§a o fim da iteraÃ§Ãµes
         residue = RMS-1;
         
-    else %SEM CONVERGÊNCIA:
+    else %SEM CONVERGÃŠNCIA:
         k=k+1; %incremento de k
-        it_final = k; %armazena a última iteração ->kmax
+        it_final = k; %armazena a Ãºltima iteraÃ§Ã£o ->kmax
         residue = RMS-1;
     end
-end %Finalização do contador de iterações
+end %FinalizaÃ§Ã£o do contador de iteraÃ§Ãµes
 
 %6) Resultado que retorna para o programa principal
 for i=1:N
@@ -289,53 +289,53 @@ end
 function [residue,it_final,T,tempo]=SOR(Ae,Aw,Su,Ap,N,T,erro,kmax,w)
 tic
 RMS=0;
-%1) Estimativa inicial da variável
+%1) Estimativa inicial da variÃ¡vel
 for i=1:N
-    M(i,1) = T(i); %A(i) é oriunda do programa principal (T)
+    M(i,1) = T(i); %A(i) Ã© oriunda do programa principal (T)
 end
 
-%2) Início do processo iterativo
-k=1; %Inicialização do contador de iterações
+%2) InÃ­cio do processo iterativo
+k=1; %InicializaÃ§Ã£o do contador de iteraÃ§Ãµes
 while (k<kmax)
-    %Cálculo da variável com os valores da iteração anterior
+    %CÃ¡lculo da variÃ¡vel com os valores da iteraÃ§Ã£o anterior
     for i=1:N
         if(i==1) %Primeiro Volume de Controle
             M(i,2)=(Ae(i)*M(i+1,1)+Su(i))/Ap(i);
         elseif((i>1)&&(i<N)) %Volumes de Controle Internos
             M(i,2)=(Aw(i)*M(i-1,2)+Ae(i)*M(i+1,1)+Su(i))/Ap(i);
-        else %Último Volume de Controle
+        else %Ãšltimo Volume de Controle
             M(i,2)=(Aw(i)*M(i-1,2)+Su(i))/Ap(i);
         end
     end
     
-    %3) Cálculo do Resíduo
+    %3) CÃ¡lculo do ResÃ­duo
     for i=1:N
         if((i>1)&&(i<N))
-            %Resíduo Local
+            %ResÃ­duo Local
             Ri(i)=abs(Su(i)+Ae(i)*M(i+1,2)+Aw(i)*M(i-1,2)-Ap(i)*M(i,2) );
-            % Resíduo da Iteração
+            % ResÃ­duo da IteraÃ§Ã£o
             RMS = RMS + Ri(i)^2.0;
         end
     end
     RMS = RMS^0.5;
     
-    %   !4) Avanço da iteração
+    %   !4) AvanÃ§o da iteraÃ§Ã£o
     for i=1:N
         M(i,1)=w*M(i,2) + (1-w)*M(i,1);
     end
     
-    %5) Verificação da convergência
-    if(RMS<=erro+1) %CONVERGÊNCIA:
-        it_final = k; %armazena a última posição iterativa
-        k=kmax; %força o fim da iterações
+    %5) VerificaÃ§Ã£o da convergÃªncia
+    if(RMS<=erro+1) %CONVERGÃŠNCIA:
+        it_final = k; %armazena a Ãºltima posiÃ§Ã£o iterativa
+        k=kmax; %forÃ§a o fim da iteraÃ§Ãµes
         residue = RMS-1;
         
-    else %SEM CONVERGÊNCIA:
+    else %SEM CONVERGÃŠNCIA:
         k=k+1; %incremento de k
-        it_final = k; %armazena a última iteração ->kmax
+        it_final = k; %armazena a Ãºltima iteraÃ§Ã£o ->kmax
         residue = RMS-1;
     end
-end %Finalização do contador de iterações
+end %FinalizaÃ§Ã£o do contador de iteraÃ§Ãµes
 
 %6) Resultado que retorna para o programa principal
 for i=1:N
