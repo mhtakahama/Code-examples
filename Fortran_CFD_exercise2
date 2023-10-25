@@ -1,12 +1,3 @@
-clear all; echo off; close all force; clc; format long; %clear another variables
-%% Doutorado em Engenharia Mecânica PPGEM
-%Universidade Tecnológica Federal do Paraná
-%Campus Curitiba
-%Aluno: Marcos Takahama
-%Professor Paulo Henrique Dias dos Santos
-%Disciplina:CFD
-%03/10/2020
-% Ex_Aula_3_CFD.m
 %     Determine o perfil de temperatura de uma barra de aço (K=25 W/mK) de 1 metro
 %     de comprimento com temperaturas prescritas nas extremidades. Na extremidade em
 %     x=0, a temperatura vale 150ºC e em x=L vale 50ºC. Resolva o problema
