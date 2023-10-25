@@ -1,11 +1,4 @@
     !****************************************************************************
-    ! Doutorado em Engenharia Mecânica PPGEM
-    ! Universidade Tecnológica Federal do Paraná
-    ! Campus Curitiba
-    ! Aluno: Marcos Takahama
-    ! Disciplina: CFD
-    ! Setembro de 2020
-    !****************************************************************************
     ! Determine o perfil de temperatura de uma barra de aço (K=25 W/mK) de 1 metro
     !de comprimento com temperaturas prescritas nas extremidades. Na extremidade em 
     !x=0, a temperatura vale 150ºC e em x=L vale 50ºC
